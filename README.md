@@ -59,8 +59,11 @@ DeepSeek API(流式输出,可换成任意 OpenAI 兼容服务)
 
 1. 打开 Edge → 进入 [Microsoft Edge 加载项商店](https://microsoftedge.microsoft.com/addons)
    → 搜索 **Tampermonkey** → 安装
-2. 下载本项目 `userscript\leetcode-mentor.user.js`,**直接拖进浏览器窗口**,
-   在打开的安装页点「安装」
+2. 安装脚本(二选一):
+   - ⭐ **一键安装(推荐)**:打开 [Greasy Fork 脚本页](https://greasyfork.org/zh-CN/scripts/597659),
+     点绿色「安装此脚本」按钮
+   - 手动安装:下载本项目 `userscript\leetcode-mentor.user.js`,**直接拖进浏览器窗口**,
+     在打开的安装页点「安装」
 3. 打开任意力扣题目页(例如 [两数之和](https://leetcode.cn/problems/two-sum/)),
    页面右下角出现 **✨ AI 讲解** 按钮,开用!
 
@@ -202,7 +205,8 @@ leetcode-mentor/
 给想安装的朋友的两条快捷路径:
 
 - **本地服务**:到 [Releases](../../releases) 下载 `LeetMentor-vX.X.X-win64.zip`,解压后双击 `LeetMentorServer.exe`
-- **油猴脚本**:安装 Tampermonkey 后,把发布包里的 `leetcode-mentor.user.js` 拖进浏览器即可
+- **油猴脚本**:⭐ [一键安装(Greasy Fork)](https://greasyfork.org/zh-CN/scripts/597659);
+  或安装 Tampermonkey 后,把发布包里的 `leetcode-mentor.user.js` 拖进浏览器即可
 
 ---
 
