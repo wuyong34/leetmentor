@@ -148,6 +148,16 @@
     <button id="btnSettings">设置</button>
   </div>
 
+  <div class="card hidden" id="wechatTip" style="border-color:#f59e0b; background:#fffbeb;">
+    <b>💡 微信里使用小提示</b>
+    <div class="hint" style="color:#92400e;">
+      微信内置浏览器不允许网页自动读取剪贴板或屏幕,推荐两种最快的用法:<br>
+      ① <b>截图题目</b> → 点下面「从相册选图」,选刚截的图 → 出答案<br>
+      ② <b>长按复制题目文字</b> → 点「输入 / 粘贴题目」,在大框里长按粘贴 → <b>自动开始解答</b><br>
+      (如果想要"网页一键抓题"书签,请在 Edge 手机版里使用)
+    </div>
+  </div>
+
   <div class="action primary" id="actClipboard">
     <div class="ico">📋</div>
     <div class="txt"><b>从剪贴板解题</b><small>在任何 App 里复制题目,回到这里一键解答</small></div>
@@ -228,6 +238,7 @@
   var API_URL = 'https://api.deepseek.com/chat/completions';
   var MODELS_URL = 'https://api.deepseek.com/models';
   var MAX_IMAGE_DIM = 1600;
+  var IS_WECHAT = /MicroMessenger/i.test(navigator.userAgent);
 
   var state = {
     key: localStorage.getItem('lm_mobile_key') || '',
@@ -634,6 +645,36 @@
     runSolve(false);
   }
 
+  // 通用"粘贴题目"界面(微信等无法读剪贴板的环境,粘贴后自动解答)
+  function showPasteBox(hintHtml) {
+    show('view-ask');
+    state.questionText = '';
+    state.questionImage = null;
+    state.history = [];
+    $('askQuestionBody').innerHTML = '';
+    $('askQa').innerHTML = '';
+    $('askAnswer').innerHTML =
+      '<div class="hint">' + hintHtml + '</div>' +
+      '<textarea id="pasteArea" rows="6" style="margin-top:8px" placeholder="长按这里粘贴题目…(粘贴后会自动开始解答)"></textarea>' +
+      '<button class="btn primary block" id="pasteGo" style="margin-top:10px;">开始解答</button>';
+    var area = document.getElementById('pasteArea');
+    var go = function () {
+      var val = (area.value || '').trim();
+      if (val.length >= 4) { startWithText(val); }
+      else { area.focus(); area.placeholder = '请先长按粘贴题目文字…'; }
+    };
+    document.getElementById('pasteGo').addEventListener('click', go);
+    area.addEventListener('paste', function (e) {
+      var txt = '';
+      try { txt = (e.clipboardData || window.clipboardData).getData('text') || ''; } catch (err) { txt = ''; }
+      setTimeout(function () {
+        var val = (area.value || txt || '').trim();
+        if (val.length >= 4) { startWithText(val); }
+      }, 250);
+    });
+    try { area.focus(); } catch (e) { /* ignore */ }
+  }
+
   // ---------------- 入口事件 ----------------
   // 设置
   $('saveKey').addEventListener('click', async function () {
@@ -676,27 +717,13 @@
     if (text && text.trim().length >= 4) {
       startWithText(text);
     } else {
-      // 剪贴板读不到(权限/微信内核限制):走手动粘贴
-      show('view-ask');
-      state.questionText = '';
-      state.questionImage = null;
-      $('askQuestionBody').innerHTML = '';
-      $('askAnswer').innerHTML = '<div class="hint">📋 无法自动读取剪贴板。请在下方输入框<b>长按 → 粘贴</b>题目,然后发送。</div>';
-      $('askQa').innerHTML = '';
-      $('askInput').placeholder = '长按粘贴题目,回车发送';
-      $('askInput').focus();
+      // 剪贴板读不到(微信/权限限制):大输入框手动粘贴,粘贴后自动解答
+      showPasteBox('📋 无法自动读取剪贴板(微信或权限限制)。请在下面的大框里<b>长按 → 粘贴</b>题目:');
     }
   });
 
   $('actText').addEventListener('click', function () {
-    show('view-ask');
-    state.questionText = '';
-    state.questionImage = null;
-    $('askQuestionBody').innerHTML = '';
-    $('askAnswer').innerHTML = '<div class="hint">⌨️ 在下方输入框输入或粘贴题目,发「发送」开始解答。</div>';
-    $('askQa').innerHTML = '';
-    $('askInput').placeholder = '输入或粘贴题目…';
-    $('askInput').focus();
+    showPasteBox('⌨️ 在下面的大框里输入题目,或<b>长按 → 粘贴</b>:');
   });
 
   $('actCamera').addEventListener('click', function () { $('fileCamera').click(); });
@@ -858,6 +885,11 @@
   } else {
     if (!intakeFromUrl()) show('view-home');
     else if (!state.questionText && !state.questionImage) show('view-home');
+  }
+
+  // 微信环境:显示专门的使用提示
+  if (IS_WECHAT) {
+    $('wechatTip').classList.remove('hidden');
   }
 
   // PWA:注册 Service Worker(仅 https;本地测试跳过)
