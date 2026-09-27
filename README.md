@@ -171,8 +171,11 @@ leetcode-mentor/
 
 ## 📦 打包便携版(在其他电脑上使用)
 
+> 推送 `v*` 标签时,GitHub Actions 会**自动**构建并发布到 Releases(见 `.github/workflows/release.yml`),一般不需要手动打包。
+
+手动打包:
 1. 双击 `scripts\build_exe.bat`
-2. 生成 `dist\LeetMentor-v0.1.1-win64.zip`(含 exe、油猴脚本、说明)
+2. 生成 `dist\LeetMentor-vX.X.X-win64.zip`(含 exe、油猴脚本、说明)
 3. 拷到其他 Windows 电脑解压 → 双击 `LeetMentorServer.exe` → 按浏览器提示走
 
 > 便携版**不需要安装 Python**;配置和缓存保存在 exe 同目录的 `data\` 里,
