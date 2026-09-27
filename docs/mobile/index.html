@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="LeetMentor">
+<title>LeetMentor 解题</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root {
+    --accent: #2563eb; --accent-dark: #1d4ed8; --border: #e2e8f0; --muted: #64748b;
+    --bg: #f4f7fb; --card: #ffffff;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: #0f172a; font-size: 16px; line-height: 1.7;
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .page { max-width: 640px; margin: 0 auto; padding: 16px 16px 40px; }
+  .hidden { display: none !important; }
+
+  .topbar { display: flex; align-items: center; gap: 10px; padding: 6px 0 14px; }
+  .topbar .logo { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; }
+  .topbar .title { font-weight: 700; font-size: 17px; flex: 1; }
+  .topbar button { border: 1px solid var(--border); background: #fff; border-radius: 10px; padding: 7px 12px;
+    font-size: 13px; color: #334155; font-family: inherit; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+  .action {
+    display: flex; align-items: center; gap: 14px; padding: 18px 16px; cursor: pointer;
+    border-radius: 16px; border: 1px solid var(--border); background: #fff; margin-bottom: 12px;
+    transition: transform .1s ease;
+  }
+  .action:active { transform: scale(.98); }
+  .action .ico { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center;
+    justify-content: center; font-size: 23px; flex: none; background: #eef4ff; }
+  .action .txt b { display: block; font-size: 16px; }
+  .action .txt small { color: var(--muted); font-size: 12.5px; }
+  .action.primary { border-color: var(--accent); background: #f5f8ff; }
+  .action.primary .txt b { color: var(--accent-dark); }
+
+  .btn { border: 1px solid var(--border); background: #fff; border-radius: 12px; padding: 12px 16px;
+    font-size: 15px; font-family: inherit; color: #1f2937; cursor: pointer; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .btn.primary:active { background: var(--accent-dark); }
+  .btn:disabled { opacity: .55; }
+  .btn.block { display: block; width: 100%; }
+
+  input[type=text], input[type=password], textarea {
+    width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px;
+    font-size: 15px; font-family: inherit; background: #fff; color: #0f172a;
+  }
+  textarea { line-height: 1.6; }
+  .hint { color: var(--muted); font-size: 12.5px; line-height: 1.8; margin-top: 8px; }
+  .hint a { color: var(--accent); }
+
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+  .status { font-size: 13px; color: var(--muted); margin-top: 10px; text-align: center; }
+  .status.busy::after { content: '…'; animation: blink 1.2s steps(4) infinite; }
+  @keyframes blink { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+  .error-box { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; border-radius: 12px;
+    padding: 12px 14px; margin: 10px 0; font-size: 14px; }
+
+  .q-bubble { background: #eef4ff; border: 1px solid #dbe7ff; border-radius: 14px; padding: 12px 14px;
+    margin-bottom: 14px; font-size: 14.5px; white-space: pre-wrap; word-break: break-word; }
+  .q-bubble img { max-width: 100%; border-radius: 10px; display: block; margin-top: 8px; }
+  .q-label { font-size: 12px; color: var(--accent-dark); font-weight: 700; margin-bottom: 6px; }
+  .a-block { font-size: 15px; }
+  .a-block h4 { font-size: 15px; margin: 16px 0 6px; padding-left: 9px; border-left: 3px solid var(--accent); }
+  .a-block h4:first-child { margin-top: 0; }
+  .a-block p { margin: 7px 0; }
+  .a-block ul, .a-block ol { margin: 7px 0; padding-left: 24px; }
+  .a-block blockquote { margin: 8px 0; padding: 4px 12px; border-left: 3px solid #cbd5e1; color: #475569; }
+  .a-block code.inline { background: #f1f5f9; border: 1px solid #e8edf3; border-radius: 5px;
+    padding: 0 5px; font-family: Consolas, monospace; font-size: 13px; }
+  .a-block pre { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 13px;
+    overflow-x: auto; font-size: 13px; line-height: 1.6; }
+  .a-block pre code { font-family: Consolas, "Courier New", monospace; }
+  .a-block table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+  .a-block th, .a-block td { border: 1px solid #e2e8f0; padding: 6px 8px; text-align: left; }
+  .a-block th { background: #f8fafc; }
+  .qa { margin-top: 16px; border-top: 1px dashed #e2e8f0; padding-top: 12px; }
+  .qa .q { font-weight: 600; margin-bottom: 6px; color: #0f172a; font-size: 14.5px; }
+
+  .askbar { position: sticky; bottom: 0; background: linear-gradient(transparent, var(--bg) 30%);
+    padding: 12px 0 calc(8px + env(safe-area-inset-bottom)); display: flex; gap: 8px; }
+  .askbar input { flex: 1; }
+  .askbar button { flex: none; }
+
+  .hist-item { padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; background: #fff;
+    margin-bottom: 10px; cursor: pointer; }
+  .hist-item .t { font-weight: 600; font-size: 14.5px; margin-bottom: 2px; }
+  .hist-item .d { color: var(--muted); font-size: 12px; }
+  .empty { color: var(--muted); text-align: center; padding: 30px 0; font-size: 14px; }
+
+  details.help { border: 1px solid var(--border); border-radius: 14px; background: #fff; padding: 4px 14px; margin-bottom: 12px; }
+  details.help summary { padding: 10px 0; font-size: 14px; color: #334155; cursor: pointer; }
+  details.help .body { font-size: 13.5px; color: #475569; padding: 4px 0 14px; line-height: 1.9; }
+  .badge { display: inline-block; background: #eef4ff; color: var(--accent-dark); border-radius: 6px;
+    padding: 1px 7px; font-size: 11.5px; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ==================== 设置页 ==================== -->
+<div class="page" id="view-setup">
+  <div class="topbar">
+    <div class="logo">LM</div>
+    <div class="title">LeetMentor 手机解题</div>
+  </div>
+
+  <div class="card">
+    <b>首次使用:填写你的 API Key</b>
+    <div class="hint" style="margin: 8px 0 12px;">
+      在手机浏览器里直接调用 DeepSeek,不经过任何第三方服务器;Key 只保存在本机浏览器中。
+      还没有 Key?到 <a href="https://platform.deepseek.com/api_keys" target="_blank">platform.deepseek.com</a> 创建(充 10 元够用很久)。
+    </div>
+    <input type="password" id="keyInput" placeholder="sk-...">
+    <div class="row" style="margin-top: 12px;">
+      <button class="btn primary" id="saveKey">保存并测试</button>
+    </div>
+    <div class="status" id="setupStatus"></div>
+    <details class="help" style="margin-top:14px; margin-bottom:0;">
+      <summary>高级:更换模型</summary>
+      <div class="body">
+        <input type="text" id="modelInput" placeholder="deepseek-flash" value="deepseek-flash">
+        <div class="hint">默认 deepseek-flash(支持识图)。一般不用改。</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ==================== 首页 ==================== -->
+<div class="page hidden" id="view-home">
+  <div class="topbar">
+    <div class="logo">LM</div>
+    <div class="title">LeetMentor 解题</div>
+    <button id="btnHistory">历史</button>
+    <button id="btnSettings">设置</button>
+  </div>
+
+  <div class="action primary" id="actClipboard">
+    <div class="ico">📋</div>
+    <div class="txt"><b>从剪贴板解题</b><small>在任何 App 里复制题目,回到这里一键解答</small></div>
+  </div>
+  <div class="action" id="actText">
+    <div class="ico">⌨️</div>
+    <div class="txt"><b>输入 / 粘贴题目</b><small>手动输入或长按粘贴文字</small></div>
+  </div>
+  <div class="action" id="actCamera">
+    <div class="ico">📷</div>
+    <div class="txt"><b>拍照解题</b><small>拍摄纸质作业、试卷(图片兜底方案)</small></div>
+  </div>
+  <div class="action" id="actGallery">
+    <div class="ico">🖼️</div>
+    <div class="txt"><b>从相册选图</b><small>截图或照片</small></div>
+  </div>
+
+  <details class="help">
+    <summary>🔖 把「一键抓题」装进浏览器书签(推荐)</summary>
+    <div class="body">
+      装好后,在<b>任何网页</b>上点一下这个书签,就会自动抓取页面上的题目并跳到这里解答,不用拍照也不用复制。<br><br>
+      <b>Edge 手机版:</b>① 点下面的「复制书签代码」→ ② Edge 菜单 → 收藏夹 → 添加收藏 →
+      名称填 <b>一键抓题</b>,地址栏<b>长按粘贴</b>刚才的代码 → 保存 ③ 以后在题目网页的地址栏输入"一键抓题"选中它即可。
+      <div style="margin-top: 10px;"><button class="btn" id="btnCopyBookmarklet">复制书签代码</button></div>
+    </div>
+  </details>
+
+  <details class="help">
+    <summary>📲 添加到手机主屏幕(像 App 一样用)</summary>
+    <div class="body">
+      <b>Edge 手机版:</b>菜单 → 「添加到手机」/「添加到主屏幕」→ 确认。<br>
+      <b>微信里:</b>把本页链接发给「文件传输助手」,随时点开即用(可再加到浮窗)。
+    </div>
+  </details>
+
+  <div class="status" id="homeStatus"></div>
+  <input type="file" id="fileCamera" accept="image/*" capture="environment" class="hidden">
+  <input type="file" id="fileGallery" accept="image/*" class="hidden">
+</div>
+
+<!-- ==================== 解题页 ==================== -->
+<div class="page hidden" id="view-ask">
+  <div class="topbar">
+    <div class="logo">LM</div>
+    <div class="title">解题</div>
+    <button id="btnAskBack">返回</button>
+  </div>
+
+  <div class="q-bubble" id="askQuestion">
+    <div class="q-label">题目</div>
+    <div id="askQuestionBody"></div>
+  </div>
+
+  <div class="status" id="askStatus"></div>
+  <div class="a-block" id="askAnswer"></div>
+  <div id="askQa"></div>
+
+  <div class="askbar" id="askBar">
+    <input type="text" id="askInput" placeholder="还有疑问?继续追问…">
+    <button class="btn primary" id="askSend">发送</button>
+  </div>
+</div>
+
+<!-- ==================== 历史页 ==================== -->
+<div class="page hidden" id="view-history">
+  <div class="topbar">
+    <div class="logo">LM</div>
+    <div class="title">历史记录</div>
+    <button id="btnHistBack">返回</button>
+  </div>
+  <div id="histList"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var API_URL = 'https://api.deepseek.com/chat/completions';
+  var MODELS_URL = 'https://api.deepseek.com/models';
+  var MAX_IMAGE_DIM = 1600;
+
+  var state = {
+    key: localStorage.getItem('lm_mobile_key') || '',
+    model: localStorage.getItem('lm_mobile_model') || 'deepseek-flash',
+    running: false,
+    // 当前会话
+    questionText: '',
+    questionImage: null,   // { dataUrl, base64, mime }
+    history: [],           // [{q, a}] 追问上下文
+    cacheHit: false
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---------------- 工具 ----------------
+  function show(view) {
+    ['view-setup', 'view-home', 'view-ask', 'view-history'].forEach(function (v) {
+      $(v).classList.toggle('hidden', v !== view);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function cyrb53(str, seed) {
+    seed = seed || 0;
+    var h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+    for (var i = 0; i < str.length; i++) {
+      var ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+  }
+
+  // ---------------- Markdown 渲染 ----------------
+  function renderMarkdown(md) {
+    var codeBlocks = [];
+    var text = String(md || '').replace(/```([\w+-]*)[ \t]*\n?([\s\S]*?)```/g, function (m, lang, code) {
+      codeBlocks.push({ code: code.replace(/\n$/, '') });
+      return '\u0000CB' + (codeBlocks.length - 1) + '\u0000';
+    });
+    var tables = [];
+    text = text.replace(/(^|\n)(\|[^\n]+\|)[ \t]*\n\|[\s:|-]+\|[ \t]*\n((?:\|[^\n]+\|[ \t]*(?:\n|$))+)/g,
+      function (m, lead, headerLine, bodyBlock) {
+        var splitRow = function (line) {
+          return line.trim().replace(/^\||\|$/g, '').split('|').map(function (s) { return s.trim(); });
+        };
+        tables.push({
+          header: splitRow(headerLine),
+          rows: bodyBlock.trim().split('\n').filter(function (l) { return l.trim(); }).map(splitRow)
+        });
+        return lead + '\u0000TB' + (tables.length - 1) + '\u0000';
+      });
+    text = escapeHtml(text);
+    text = text.replace(/`([^`\n]+)`/g, '<code class="inline">$1</code>');
+    text = text.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+    var out = [];
+    var listMode = null;
+    var closeList = function () { if (listMode) { out.push('</' + listMode + '>'); listMode = null; } };
+    var openList = function (mode) {
+      if (listMode !== mode) { closeList(); listMode = mode; out.push('<' + mode + '>'); }
+    };
+    text.split('\n').forEach(function (rawLine) {
+      var line = rawLine.trim();
+      if (!line) { closeList(); return; }
+      if (line.indexOf('\u0000CB') === 0 || line.indexOf('\u0000TB') === 0) { closeList(); out.push(line); return; }
+      if (/^#{1,6}\s*$/.test(line)) { closeList(); return; }
+      var m;
+      if ((m = line.match(/^#{1,6}\s+(\S.*)$/))) { closeList(); out.push('<h4>' + m[1] + '</h4>'); return; }
+      if (/^([-*_])\1{2,}$/.test(line)) { closeList(); out.push('<hr>'); return; }
+      if ((m = line.match(/^[-*]\s+(.*)$/))) { openList('ul'); out.push('<li>' + m[1] + '</li>'); return; }
+      if ((m = line.match(/^\d+[.、)]\s*(.*)$/))) { openList('ol'); out.push('<li>' + m[1] + '</li>'); return; }
+      if ((m = line.match(/^>\s?(.*)$/))) { closeList(); out.push('<blockquote>' + m[1] + '</blockquote>'); return; }
+      closeList();
+      out.push('<p>' + line + '</p>');
+    });
+    closeList();
+    var html = out.join('\n');
+    html = html.replace(/\u0000CB(\d+)\u0000/g, function (_m, i) {
+      return '<pre><code>' + escapeHtml((codeBlocks[Number(i)] || { code: '' }).code) + '</code></pre>';
+    });
+    html = html.replace(/\u0000TB(\d+)\u0000/g, function (_m, i) {
+      var t = tables[Number(i)];
+      if (!t) return '';
+      return '<table><thead><tr>' + t.header.map(function (h) { return '<th>' + escapeHtml(h) + '</th>'; }).join('') +
+        '</tr></thead><tbody>' + t.rows.map(function (r) {
+          return '<tr>' + t.header.map(function (_h, ci) { return '<td>' + escapeHtml(r[ci] || '') + '</td>'; }).join('') + '</tr>';
+        }).join('') + '</tbody></table>';
+    });
+    return html;
+  }
+
+  // ---------------- 提示词 ----------------
+  var SYSTEM_PROMPT = '你是一位耐心、可靠的全科学习导师,面向中学生和大学低年级学生,用中文讲解。\n' +
+    '要求:语言平实;先讲思路再讲细节;公式用简单文本表示(x^2、√3、a/b);信息不足时明确指出缺什么,不要编造;' +
+    '输出使用 Markdown,标题用三级(###),不要提"作为 AI"。';
+
+  var TASK_EXPLAIN = '【任务】请先识别题目,再给出讲解。严格按以下结构输出:\n\n' +
+    '### 题目识别\n把你读到的题目完整写出来(数字、条件、单位都要);图片模糊或信息不全时说明哪里看不清。\n\n' +
+    '### 这段内容在讲什么\n一两句话点出学科和考查的知识点。\n\n' +
+    '### 读懂它\n复述已知条件和要求解的结论,标出容易看漏的条件。\n\n' +
+    '### 一步步解决\n清晰的解题步骤(第 1 步、第 2 步……),每一步说明"为什么这样做"。\n\n' +
+    '### 需要掌握的知识点\n2~4 个相关基础知识,每个一两句话。\n\n' +
+    '### 容易错的地方\n1~3 个典型误区或检查方法。\n\n' +
+    '【要求】不要编造题目中没有的条件;不要提"根据要求"等字样。';
+
+  var TASK_FOLLOWUP = '【任务】学生看完上面的讲解后提出了一个追问,请直接回答,不要重复整段讲解;' +
+    '如果追问暴露出理解偏差,先温和地纠正;必要时用小例子说明;300 字以内。';
+
+  function buildMessages(question, isFollowup) {
+    var parts = [];
+    if (question) parts.push('【学生的追问】\n' + question);
+    if (isFollowup && state.history.length) {
+      var lines = ['【之前的讲解与问答(供衔接)】'];
+      state.history.slice(-6).forEach(function (pair) {
+        if (pair.a) lines.push('[之前的讲解]\n' + pair.a.slice(0, 3000));
+        if (pair.q) lines.push('[学生追问]\n' + pair.q.slice(0, 500));
+      });
+      parts.unshift(lines.join('\n\n'));
+    }
+    parts.push(isFollowup ? TASK_FOLLOWUP : TASK_EXPLAIN);
+
+    var content;
+    if (state.questionImage && !isFollowup) {
+      content = [
+        { type: 'text', text: parts.join('\n\n') },
+        { type: 'image_url', image_url: { url: state.questionImage.dataUrl } }
+      ];
+    } else if (state.questionImage && isFollowup) {
+      content = [
+        { type: 'text', text: parts.join('\n\n') },
+        { type: 'image_url', image_url: { url: state.questionImage.dataUrl } }
+      ];
+    } else {
+      var textParts = ['【学生提供的内容】\n' + state.questionText].concat(parts);
+      content = textParts.join('\n\n');
+    }
+    return [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: content }
+    ];
+  }
+
+  // ---------------- DeepSeek 直连(带降级) ----------------
+  async function readStream(res, onDelta) {
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var buffer = '';
+    var full = '';
+    for (;;) {
+      var r = await reader.read();
+      if (r.done) break;
+      buffer += decoder.decode(r.value, { stream: true });
+      var idx;
+      while ((idx = buffer.indexOf('\n\n')) >= 0) {
+        var block = buffer.slice(0, idx);
+        buffer = buffer.slice(idx + 2);
+        var line = null;
+        block.split('\n').some(function (l) { if (l.indexOf('data:') === 0) { line = l; return true; } return false; });
+        if (!line) continue;
+        var payload = line.slice(5).trim();
+        if (payload === '[DONE]') continue;
+        var evt = null;
+        try { evt = JSON.parse(payload); } catch (e) { continue; }
+        var delta = evt.choices && evt.choices[0] && evt.choices[0].delta && evt.choices[0].delta.content;
+        if (delta) { full += delta; onDelta(delta); }
+      }
+    }
+    return full;
+  }
+
+  async function callModel(messages, onDelta) {
+    var body = JSON.stringify({
+      model: state.model || 'deepseek-flash',
+      messages: messages,
+      stream: true,
+      temperature: 0.4
+    });
+    var headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.key };
+    var res;
+    try {
+      res = await fetch(API_URL, { method: 'POST', headers: headers, body: body });
+    } catch (e) {
+      throw new Error('无法连接 DeepSeek(检查网络或代理)。' + (e && e.message ? '' : ''));
+    }
+    if (!res.ok) {
+      var detail = '';
+      try { detail = (await res.text()).slice(0, 200); } catch (e2) { /* ignore */ }
+      if (res.status === 401) throw new Error('API Key 无效,请到「设置」里重新填写。');
+      if (res.status === 402) throw new Error('DeepSeek 账户余额不足,请充值后再试。');
+      if (res.status === 429) throw new Error('请求太频繁,稍等几秒再试。');
+      throw new Error('DeepSeek 返回错误(' + res.status + ')' + (detail ? ':' + detail : ''));
+    }
+    // 优先流式
+    if (res.body && res.body.getReader) {
+      try {
+        return await readStream(res, onDelta);
+      } catch (e3) {
+        // 流式解析失败(部分微信内核),重发非流式请求
+      }
+    }
+    var res2 = await fetch(API_URL, {
+      method: 'POST', headers: headers,
+      body: JSON.stringify({ model: state.model || 'deepseek-flash', messages: messages, stream: false, temperature: 0.4 })
+    });
+    var data = await res2.json();
+    var full2 = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+    if (full2) onDelta(full2);
+    return full2;
+  }
+
+  // ---------------- 图片压缩 ----------------
+  function compressImage(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () {
+        var w = img.naturalWidth, h = img.naturalHeight;
+        var scale = Math.min(1, MAX_IMAGE_DIM / Math.max(w, h));
+        var canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(w * scale));
+        canvas.height = Math.max(1, Math.round(h * scale));
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        URL.revokeObjectURL(url);
+        resolve({
+          dataUrl: dataUrl,
+          base64: dataUrl.split(',')[1],
+          mime: 'image/jpeg'
+        });
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('图片读取失败')); };
+      img.src = url;
+    });
+  }
+
+  // ---------------- 本地缓存与历史 ----------------
+  function getCache(key) {
+    try { return localStorage.getItem('lm_c_' + key) || ''; } catch (e) { return ''; }
+  }
+  function setCache(key, value) {
+    try {
+      var keys = JSON.parse(localStorage.getItem('lm_cache_keys') || '[]');
+      if (keys.indexOf(key) < 0) keys.push(key);
+      while (keys.length > 50) {
+        var old = keys.shift();
+        localStorage.removeItem('lm_c_' + old);
+      }
+      localStorage.setItem('lm_cache_keys', JSON.stringify(keys));
+      localStorage.setItem('lm_c_' + key, value);
+    } catch (e) { /* ignore */ }
+  }
+  function cacheKey() {
+    if (state.questionImage) return 'img_' + cyrb53(state.questionImage.base64.slice(0, 4000) + state.questionImage.base64.length);
+    return 'txt_' + cyrb53(state.questionText);
+  }
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem('lm_hist') || '[]'); } catch (e) { return []; }
+  }
+  function pushHistory(entry) {
+    try {
+      var list = loadHistory();
+      list.unshift(entry);
+      while (list.length > 20) list.pop();
+      localStorage.setItem('lm_hist', JSON.stringify(list));
+    } catch (e) { /* ignore */ }
+  }
+  function titleOf(text) {
+    var t = String(text || '').replace(/[#*\s]+/g, ' ').trim();
+    return t.slice(0, 40) || '未命名';
+  }
+
+  // ---------------- 解题主流程 ----------------
+  var currentAnswerText = '';
+
+  function renderAnswer(el, md) { el.innerHTML = renderMarkdown(md); }
+
+  async function runSolve(isFollowup, followupQuestion) {
+    if (state.running) return;
+    if (!state.key) { show('view-setup'); return; }
+
+    state.running = true;
+    $('askSend').disabled = true;
+    $('askInput').disabled = true;
+
+    var answerEl;
+    var questionBubble;
+    if (!isFollowup) {
+      // 首次:清空界面
+      $('askQuestionBody').innerHTML = '';
+      if (state.questionImage) {
+        var imgEl = document.createElement('img');
+        imgEl.src = state.questionImage.dataUrl;
+        $('askQuestionBody').appendChild(imgEl);
+      }
+      if (state.questionText) {
+        var txtEl = document.createElement('div');
+        txtEl.style.marginTop = state.questionImage ? '8px' : '0';
+        txtEl.textContent = state.questionText;
+        $('askQuestionBody').appendChild(txtEl);
+      }
+      $('askAnswer').innerHTML = '';
+      $('askQa').innerHTML = '';
+      state.history = [];
+      answerEl = $('askAnswer');
+      questionBubble = null;
+
+      // 缓存命中?(仅首次、无追问)
+      var cached = getCache(cacheKey());
+      if (cached) {
+        renderAnswer(answerEl, cached);
+        state.history = [{ q: '', a: cached }];
+        setAskStatus('⚡ 来自本地缓存(没有调用 AI,不花钱)', false);
+        state.running = false;
+        $('askSend').disabled = false;
+        $('askInput').disabled = false;
+        return;
+      }
+    } else {
+      // 追问:新建问答块
+      var qa = document.createElement('div');
+      qa.className = 'qa';
+      var qEl = document.createElement('div');
+      qEl.className = 'q';
+      qEl.textContent = '🙋 ' + followupQuestion;
+      var aEl = document.createElement('div');
+      aEl.innerHTML = '<div class="status busy">正在思考</div>';
+      qa.appendChild(qEl);
+      qa.appendChild(aEl);
+      $('askQa').appendChild(qa);
+      answerEl = aEl;
+    }
+
+    setAskStatus(isFollowup ? '正在思考…' : (state.questionImage ? '正在识别题目…' : '正在讲解…'), true);
+
+    var acc = '';
+    var renderTimer = null;
+    var renderNow = function () { renderAnswer(answerEl, acc); };
+    var renderSoon = function () {
+      if (renderTimer) return;
+      renderTimer = setTimeout(function () { renderTimer = null; renderNow(); }, 150);
+    };
+
+    try {
+      var messages = buildMessages(followupQuestion || '', isFollowup);
+      await callModel(messages, function (delta) {
+        acc += delta;
+        renderSoon();
+      });
+      if (!acc.trim()) throw new Error('没有收到内容,请重试。');
+      renderAnswer(answerEl, acc);
+      if (!isFollowup) {
+        setCache(cacheKey(), acc);
+        pushHistory({
+          ts: Date.now(),
+          title: titleOf(state.questionText || acc),
+          text: state.questionText || '',
+          answer: acc
+        });
+        state.history = [{ q: '', a: acc }];
+      } else {
+        state.history.push({ q: followupQuestion, a: acc });
+      }
+      setAskStatus('完成', false);
+    } catch (err) {
+      answerEl.innerHTML = '<div class="error-box">' + escapeHtml((err && err.message) || String(err)) + '</div>';
+      setAskStatus('失败', false);
+    } finally {
+      state.running = false;
+      $('askSend').disabled = false;
+      $('askInput').disabled = false;
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  }
+
+  function setAskStatus(text, busy) {
+    var el = $('askStatus');
+    el.textContent = text || '';
+    el.classList.toggle('busy', !!busy);
+  }
+
+  function startWithText(text) {
+    text = (text || '').trim();
+    if (!text) return;
+    state.questionText = text;
+    state.questionImage = null;
+    show('view-ask');
+    runSolve(false);
+  }
+
+  function startWithImage(image) {
+    state.questionImage = image;
+    state.questionText = '';
+    show('view-ask');
+    runSolve(false);
+  }
+
+  // ---------------- 入口事件 ----------------
+  // 设置
+  $('saveKey').addEventListener('click', async function () {
+    var key = $('keyInput').value.trim();
+    var model = $('modelInput').value.trim() || 'deepseek-flash';
+    if (key.indexOf('sk-') !== 0) { $('setupStatus').textContent = 'Key 一般以 sk- 开头,请检查后重试。'; return; }
+    $('setupStatus').textContent = '正在测试连接…';
+    $('setupStatus').classList.add('busy');
+    try {
+      var res = await fetch(MODELS_URL, { headers: { Authorization: 'Bearer ' + key } });
+      if (res.ok) {
+        state.key = key;
+        state.model = model;
+        localStorage.setItem('lm_mobile_key', key);
+        localStorage.setItem('lm_mobile_model', model);
+        $('setupStatus').classList.remove('busy');
+        $('setupStatus').textContent = '连接成功 ✓';
+        show('view-home');
+      } else if (res.status === 401) {
+        $('setupStatus').classList.remove('busy');
+        $('setupStatus').textContent = 'Key 无效,请检查。';
+      } else {
+        $('setupStatus').classList.remove('busy');
+        $('setupStatus').textContent = '连接异常(HTTP ' + res.status + '),请稍后再试。';
+      }
+    } catch (e) {
+      $('setupStatus').classList.remove('busy');
+      $('setupStatus').textContent = '网络不通,检查手机网络/代理后重试。';
+    }
+  });
+
+  // 首页按钮
+  $('actClipboard').addEventListener('click', async function () {
+    var text = '';
+    try {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        text = await navigator.clipboard.readText();
+      }
+    } catch (e) { text = ''; }
+    if (text && text.trim().length >= 4) {
+      startWithText(text);
+    } else {
+      // 剪贴板读不到(权限/微信内核限制):走手动粘贴
+      show('view-ask');
+      state.questionText = '';
+      state.questionImage = null;
+      $('askQuestionBody').innerHTML = '';
+      $('askAnswer').innerHTML = '<div class="hint">📋 无法自动读取剪贴板。请在下方输入框<b>长按 → 粘贴</b>题目,然后发送。</div>';
+      $('askQa').innerHTML = '';
+      $('askInput').placeholder = '长按粘贴题目,回车发送';
+      $('askInput').focus();
+    }
+  });
+
+  $('actText').addEventListener('click', function () {
+    show('view-ask');
+    state.questionText = '';
+    state.questionImage = null;
+    $('askQuestionBody').innerHTML = '';
+    $('askAnswer').innerHTML = '<div class="hint">⌨️ 在下方输入框输入或粘贴题目,发「发送」开始解答。</div>';
+    $('askQa').innerHTML = '';
+    $('askInput').placeholder = '输入或粘贴题目…';
+    $('askInput').focus();
+  });
+
+  $('actCamera').addEventListener('click', function () { $('fileCamera').click(); });
+  $('actGallery').addEventListener('click', function () { $('fileGallery').click(); });
+
+  function handleFileInput(input) {
+    var f = input.files && input.files[0];
+    input.value = '';
+    if (!f) return;
+    $('homeStatus').textContent = '正在压缩图片…';
+    compressImage(f).then(function (image) {
+      $('homeStatus').textContent = '';
+      startWithImage(image);
+    }).catch(function (e) {
+      $('homeStatus').textContent = '图片处理失败:' + e.message;
+    });
+  }
+  $('fileCamera').addEventListener('change', function () { handleFileInput($('fileCamera')); });
+  $('fileGallery').addEventListener('change', function () { handleFileInput($('fileGallery')); });
+
+  // 追问
+  $('askSend').addEventListener('click', function () {
+    var q = $('askInput').value.trim();
+    if (!q) return;
+    $('askInput').value = '';
+    onAskSend(q);
+  });
+  $('askInput').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    var q = $('askInput').value.trim();
+    if (!q) return;
+    $('askInput').value = '';
+    onAskSend(q);
+  });
+  function onAskSend(q) {
+    if (state.running) return;
+    if (!state.history.length && !state.questionText) {
+      // 还没开始解题:把输入当题目
+      startWithText(q);
+      return;
+    }
+    runSolve(true, q);
+  }
+
+  // 导航
+  $('btnSettings').addEventListener('click', function () {
+    $('keyInput').value = '';
+    $('modelInput').value = state.model || 'deepseek-flash';
+    $('setupStatus').textContent = '';
+    show('view-setup');
+  });
+  $('btnAskBack').addEventListener('click', function () { show('view-home'); });
+  $('btnHistBack').addEventListener('click', function () { show('view-home'); });
+  $('btnHistory').addEventListener('click', function () {
+    var list = loadHistory();
+    var box = $('histList');
+    if (!list.length) { box.innerHTML = '<div class="empty">还没有记录</div>'; }
+    else {
+      box.innerHTML = list.map(function (item, i) {
+        var d = new Date(item.ts);
+        var ds = (d.getMonth() + 1) + '月' + d.getDate() + '日 ' +
+          String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+        return '<div class="hist-item" data-i="' + i + '"><div class="t">' + escapeHtml(item.title) + '</div>' +
+          '<div class="d">' + ds + '</div></div>';
+      }).join('');
+      Array.prototype.forEach.call(box.querySelectorAll('.hist-item'), function (el) {
+        el.addEventListener('click', function () {
+          var item = loadHistory()[Number(el.getAttribute('data-i'))];
+          if (!item) return;
+          show('view-ask');
+          state.questionText = item.text || '';
+          state.questionImage = null;
+          state.history = [{ q: '', a: item.answer }];
+          $('askQuestionBody').textContent = item.text || '(图片题)';
+          $('askAnswer').innerHTML = renderMarkdown(item.answer);
+          $('askQa').innerHTML = '';
+          setAskStatus('来自历史记录', false);
+        });
+      });
+    }
+    show('view-history');
+  });
+
+  // 书签工具
+  $('btnCopyBookmarklet').addEventListener('click', function () {
+    var appUrl = location.origin + location.pathname;
+    var code = ("javascript:(function(){try{var s='';try{s=window.getSelection().toString().trim()}catch(e0){}" +
+      "var t='';if(s.length>10){t=s}else{var kws=/示例|题目|下列|已知|求解|计算|证明|选择|填空|答案|求/;" +
+      "var cands=document.querySelectorAll('article,main,section,div');var best='',bs=-1;" +
+      "for(var i=0;i<cands.length&&i<3000;i++){var el=cands[i];" +
+      "if(el.closest&&el.closest('nav,header,footer,aside,script,style'))continue;" +
+      "var tx=el.innerText||'';if(tx.length<80||tx.length>12000)continue;" +
+      "var sc=tx.length*0.001;if(kws.test(tx))sc+=50;var tag=el.tagName;" +
+      "if(tag==='ARTICLE'||tag==='MAIN')sc+=5;if(sc>bs){bs=sc;best=tx}}" +
+      "t=best}if(!t){alert('没找到题目文字:可以先长按选中题目,再点这个书签');return}" +
+      "t=t.slice(0,6000);var u=APPURL+'#t='+encodeURIComponent(t);" +
+      "var w=window.open(u,'_blank');if(!w){location.href=u}" +
+      "}catch(x){alert('抓取失败:'+x.message)}})();"
+      ).replace('APPURL', JSON.stringify(appUrl));
+
+    var done = function () { $('btnCopyBookmarklet').textContent = '已复制 ✓(去收藏夹粘贴)'; };
+    var fallback = function () {
+      var box = document.getElementById('bookmarkletBox');
+      if (!box) {
+        box = document.createElement('textarea');
+        box.id = 'bookmarkletBox';
+        box.rows = 4;
+        box.style.marginTop = '10px';
+        box.style.fontSize = '12px';
+        $('btnCopyBookmarklet').parentNode.appendChild(box);
+      }
+      box.value = code;
+      box.focus();
+      box.select();
+      $('btnCopyBookmarklet').textContent = '已生成,请长按上面的框全选复制';
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(done, fallback);
+      } else {
+        fallback();
+      }
+    } catch (e) {
+      fallback();
+    }
+  });
+
+  // ---------------- 启动 ----------------
+  function intakeFromUrl() {
+    // 书签入口:#t=<encoded>
+    if (location.hash.indexOf('#t=') === 0) {
+      var raw = '';
+      try { raw = decodeURIComponent(location.hash.slice(3)); } catch (e) { raw = ''; }
+      history.replaceState(null, '', location.pathname + location.search);
+      if (raw.trim()) { startWithText(raw); return true; }
+    }
+    // 分享入口:?text= / ?url=
+    var params = new URLSearchParams(location.search);
+    var text = params.get('text') || '';
+    var url = params.get('url') || '';
+    if (text.trim()) {
+      history.replaceState(null, '', location.pathname);
+      if (url) text = text + '\n(来源:' + url + ')';
+      startWithText(text);
+      return true;
+    }
+    if (url && !text.trim()) {
+      history.replaceState(null, '', location.pathname);
+      show('view-ask');
+      $('askQuestionBody').innerHTML = '<div class="hint">收到分享的链接,但浏览器不允许读取其他网页的内容。' +
+        '请回到原网页<b>长按选中题目文字</b>,再分享一次(或复制文字后用「从剪贴板解题」)。</div>';
+      return true;
+    }
+    return false;
+  }
+
+  if (!state.key) {
+    show('view-setup');
+  } else {
+    if (!intakeFromUrl()) show('view-home');
+    else if (!state.questionText && !state.questionImage) show('view-home');
+  }
+
+  // PWA:注册 Service Worker(仅 https;本地测试跳过)
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('sw.js').catch(function () { /* ignore */ });
+  }
+
+  // 页面已打开时收到新的书签跳转(只变 hash 的情况)
+  window.addEventListener('hashchange', function () {
+    if (location.hash.indexOf('#t=') === 0) intakeFromUrl();
+  });
+})();
+</script>
+</body>
+</html>

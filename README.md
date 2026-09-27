@@ -9,6 +9,7 @@ API Key 与所有数据只保存在你自己的电脑上,不上传云端。
 |---|---|
 | **装浏览器插件**<br><small>力扣讲解 / 划词 / 识图</small> | ① Edge 安装 [Tampermonkey](https://microsoftedge.microsoft.com/addons)(商店搜索即可)<br>② ⭐ [**点此一键安装脚本**](https://greasyfork.org/zh-CN/scripts/597659)(Greasy Fork,点绿色「安装此脚本」) |
 | **装本地服务**<br><small>所有 AI 功能的"发动机"</small> | ① 到 [Releases](../../releases) 下载 `LeetMentor-vX.X.X-win64.zip`,解压<br>② 双击 `LeetMentorServer.exe`(免安装 Python)<br>③ 在自动打开的设置页填入自己的 [DeepSeek API Key](https://platform.deepseek.com/api_keys) |
+| **📱 手机解题**<br><small>免电脑 · Android / 微信可用</small> | 打开 **https://wuyong34.github.io/leetmentor/mobile/**<br><small>(首次需在仓库 Settings → Pages 开启 /docs 托管,见「手机版」一节)</small> |
 
 > 完整图文步骤见下文「三步开始使用」;遇到问题先看「常见问题」。
 
@@ -115,6 +116,30 @@ DeepSeek API(流式输出,可换成任意 OpenAI 兼容服务)
    - **粘贴文字**:把摘要或正文复制进来,适合不在 arXiv 上的论文
 3. 生成结果包含:一句话结论 / 研究问题 / 方法 / 主要结果 / 贡献与局限 / 术语表 / 值得思考的问题
 4. 同一篇论文只请求一次(按文件内容/arXiv 编号缓存),再次查看零成本;「重新生成」可忽略缓存
+
+## 📱 手机版(免电脑,Android / 微信都能用)
+
+无需安装 App、无需电脑、无需插件——手机浏览器打开网页即用,还能「添加到主屏幕」当 App 使用。
+所有请求由手机**直连 DeepSeek**,API Key 只存在手机本地。
+
+### 一次性开启(3 步)
+
+1. 本仓库 **Settings → Pages** → Source 选 **Deploy from a branch** → Branch 选 **main**、目录选 **/docs** → Save
+2. 等约 1 分钟,手机浏览器打开:**https://wuyong34.github.io/leetmentor/mobile/**
+3. 粘贴一次自己的 DeepSeek API Key(存手机本地,之后不用再管)
+
+### 四种解题方式(能不用拍照就不用拍照)
+
+| 入口 | 用法 |
+|---|---|
+| 🔖 **网页一键抓题**(推荐) | 在应用里点「复制书签代码」,按提示加入浏览器收藏;以后在**任何题目网页**点一下这个书签 → 自动抓取页面题目并跳转出解答(无需拍照、无需选中) |
+| 📋 **剪贴板解题** | 在任何 App 里复制题目 → 打开 LeetMentor → 一键解答(覆盖非网页场景) |
+| ⌨️ **输入 / 粘贴** | 手动输入题目文字 |
+| 🖼 **拍照 / 相册**(兜底) | 题目是纯图片、无法复制时使用 |
+
+- 支持**追问**、**历史记录**(最近 20 题)、**本地缓存**(重复题目不花钱,显示「⚡ 来自缓存」)
+- **微信里用**:把链接发给「文件传输助手」,随时点开;也可加为浮窗
+- **Edge 里用**:菜单 → 添加到手机主屏幕 → 有图标、全屏打开的"App"
 
 ## 🧰 文件转换工具箱
 

@@ -1,0 +1,20 @@
+{
+  "name": "LeetMentor 手机解题",
+  "short_name": "LeetMentor",
+  "description": "手机上的 AI 解题助手:网页一键抓题 / 剪贴板 / 拍照,分步讲解并支持追问",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#2563eb",
+  "lang": "zh-CN",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ],
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": { "text": "text", "title": "title", "url": "url" }
+  }
+}
