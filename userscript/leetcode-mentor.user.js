@@ -6,8 +6,6 @@
 // @author       LeetMentor
 // @license      MIT
 // @homepageURL  https://github.com/wuyong34/leetmentor
-// @updateURL    https://raw.githubusercontent.com/wuyong34/leetmentor/main/userscript/leetcode-mentor.user.js
-// @downloadURL  https://raw.githubusercontent.com/wuyong34/leetmentor/main/userscript/leetcode-mentor.user.js
 // @match        *://*/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
