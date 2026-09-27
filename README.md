@@ -1,7 +1,30 @@
-# LeetMentor — 力扣 AI 解题导师
+# LeetMentor — 本地 AI 学习助手
 
-面向**编程初学者**的力扣(leetcode.cn)学习助手:在题目页点一下按钮,AI 按
-「思路引导 → 详细步骤 → 参考代码」三层递进讲解,引导你自己思考,而不是直接抄答案。
+开源、本地运行的 AI 学习助手:**力扣三层讲解 · 学科题划词/识图 · 论文总结 · 实验数据分析 · 文件转换工具箱**。
+API Key 与所有数据只保存在你自己的电脑上,不上传云端。
+
+## 🚀 30 秒装好,马上用
+
+| 我要…… | 怎么做 |
+|---|---|
+| **装浏览器插件**<br><small>力扣讲解 / 划词 / 识图</small> | ① Edge 安装 [Tampermonkey](https://microsoftedge.microsoft.com/addons)(商店搜索即可)<br>② ⭐ [**点此一键安装脚本**](https://greasyfork.org/zh-CN/scripts/597659)(Greasy Fork,点绿色「安装此脚本」) |
+| **装本地服务**<br><small>所有 AI 功能的"发动机"</small> | ① 到 [Releases](../../releases) 下载 `LeetMentor-vX.X.X-win64.zip`,解压<br>② 双击 `LeetMentorServer.exe`(免安装 Python)<br>③ 在自动打开的设置页填入自己的 [DeepSeek API Key](https://platform.deepseek.com/api_keys) |
+
+> 完整图文步骤见下文「三步开始使用」;遇到问题先看「常见问题」。
+
+## 🖼 效果预览
+
+**力扣题目:三层引导式讲解**(按钮可拖动到任意位置)
+
+![力扣三层讲解](docs/images/panel-leetcode.png)
+
+**学习工作台:论文总结**(arXiv 链接 / 上传 PDF / 粘贴文字)
+
+![论文总结](docs/images/workbench-paper.png)
+
+**论文详细分析**(含实验思路与结果表格)
+
+![论文详细分析](docs/images/workbench-paper-detail.png)
 
 ## ✨ 特性
 
