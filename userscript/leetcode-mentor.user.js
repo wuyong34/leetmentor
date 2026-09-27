@@ -4,6 +4,10 @@
 // @version      0.3.1
 // @description  力扣题目三层引导式讲解;任意网页选中文字或粘贴截图,即可让 AI 识图讲解并追问(数学/物理/化学/概念)。
 // @author       LeetMentor
+// @license      MIT
+// @homepageURL  https://github.com/wuyong34/leetmentor
+// @updateURL    https://raw.githubusercontent.com/wuyong34/leetmentor/main/userscript/leetcode-mentor.user.js
+// @downloadURL  https://raw.githubusercontent.com/wuyong34/leetmentor/main/userscript/leetcode-mentor.user.js
 // @match        *://*/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
