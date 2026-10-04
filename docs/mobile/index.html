@@ -428,7 +428,7 @@
     try {
       res = await fetch(API_URL, { method: 'POST', headers: headers, body: body });
     } catch (e) {
-      throw new Error('无法连接 DeepSeek(检查网络或代理)。' + (e && e.message ? '' : ''));
+      throw new Error('无法连接 DeepSeek(检查手机网络或代理)。详情:' + String((e && e.message) || e).slice(0, 120));
     }
     if (!res.ok) {
       var detail = '';
@@ -702,7 +702,8 @@
       }
     } catch (e) {
       $('setupStatus').classList.remove('busy');
-      $('setupStatus').textContent = '网络不通,检查手机网络/代理后重试。';
+      $('setupStatus').textContent = '网络不通:' + String((e && e.message) || e).slice(0, 90) +
+        '。建议换 Edge 打开本页重试(微信内核可能拦截网络请求)。';
     }
   });
 
